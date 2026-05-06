@@ -1,0 +1,893 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Service Desk Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+  body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+  }
+
+  /* GLASS EFFECT */
+  .glass{
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  /* LOGIN */
+  .login-main {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+  }
+
+  .login-main input{
+  margin-bottom: 15px;
+}
+
+.login-main .glass{
+  padding: 20px;
+  border-radius: 20px;
+}
+
+  .login-card {
+    display:flex;
+    width:900px;
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 10px 40px rgba(0,0,0,0.2);
+  }
+
+    /* INPUT */
+  input{
+    width:100%;
+    margin:10px 0;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    background: rgba(255,255,255,0.85);
+    font-size:14px;
+  }
+
+
+  input, select{
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    outline:none;
+    background: rgba(255,255,255,0.8);
+  }
+
+    /* BUTTON */
+  .btn{
+    padding:12px;
+    border:none;
+    border-radius:25px;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+  }
+
+  .btn:hover{
+  transform:scale(1.05);
+  }
+
+  .login-left { flex: 1; padding: 50px; }
+  .login-left input { width: 100%; padding: 12px; margin: 10px 0; }
+
+  .login-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+
+  .login-btn:hover{
+    opacity:0.9;
+  }
+
+  .login-right { flex:1; text-align:center; padding:40px; }
+
+.hidden {
+  display: none !important;
+}
+
+  .layout { display:flex; }
+
+  .dashboard-flex{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width:220px;
+    background:#1e293b;
+    color:white;
+    height:100vh;
+    padding:20px;
+  }
+
+  .sidebar ul { list-style:none; padding:0; }
+  .sidebar li { margin:15px 0; cursor:pointer; }
+  .sidebar li:hover{ color:#38bdf8; }
+
+  /* MAIN */
+  .main { flex:1; padding:20px; }
+
+  .topbar {
+    background:white;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:20px;
+    font-weight:bold;
+  }
+
+  /* DASHBOARD */
+  .cards { display:flex; gap:20px; }
+
+  .card{
+  flex:1;
+  padding:25px;
+  border-radius:15px;
+  background: linear-gradient(135deg,#6a11cb,#2575fc);
+  color:white;
+  text-align:center;
+  font-size:18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  /* FORM CARD */
+  .premium-card{
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    padding:30px;
+    border-radius:20px;
+    width:550px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+    margin-bottom:20px;
+  }
+
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+  }
+
+  .form-grid input,
+  .form-grid select{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    background:#f1f5f9;
+  }
+
+  .premium-card input,
+  .premium-card select{
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    background: rgba(255,255,255,0.9);
+    font-size:14px;
+  }
+
+  button {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.85;
+  }
+
+  .premium-card button{
+    margin-top:15px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white;
+    font-weight:bold;
+    font-size:15px;
+  }
+
+  .premium-card button:hover{
+    transform:scale(1.03);
+  }
+
+  /* TABLE */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+  }
+
+  th{
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white;
+  }
+
+  tr:hover{
+    background:#f0f8ff;
+  }
+
+  th,td{
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+  }
+
+  #sessionsTable td {
+  padding: 10px;
+  }
+
+  #sessionsTable tr:hover {
+    background: rgba(255,255,255,0.05);
+  }
+
+  .active-row {
+  background: rgba(34,197,94,0.1);
+  }
+
+  #forgotScreen {
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+#requestTable{
+  margin-top:30px;
+}
+
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-content{
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  width:350px;
+  text-align:center;
+}
+
+.modal-content h3{
+  margin-bottom:15px;
+}
+
+.modal-content select{
+  width:100%;
+  padding:10px;
+  margin-bottom:15px;
+  border-radius:8px;
+}
+
+.modal-content button{
+  margin:5px;
+}
+
+.modal-box{
+  width:420px;
+  padding:25px;
+  border-radius:16px;
+  background:white;
+  text-align:center;
+}
+
+.modal-box h3{
+  margin-bottom:15px;
+}
+
+.modal-box select{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+
+.modal-box button{
+  margin:5px;
+  padding:8px 12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.modal-box ul{
+  margin-top:15px;
+  text-align:left;
+}
+
+.modal-box li{
+  padding:5px 0;
+}
+
+
+.hidden{
+  display:none;
+}
+
+
+.request-container{
+  max-width:600px;
+  margin:40px auto;
+}
+
+.request-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.request-form input,
+.request-form select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  background:#f1f5f9;
+  box-sizing: border-box;
+}
+
+.request-form select{
+  cursor:pointer;
+}
+
+/* full width fields */
+.full-width{
+  grid-column: span 2;
+}
+
+.request-btn{
+  grid-column:span 2;
+  width:100%;
+  margin:10px auto 0;
+  padding:14px;
+  border:none;
+  border-radius:25px;
+  background:linear-gradient(90deg,#6a11cb,#2575fc);
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  display:block;
+}
+
+.danger-btn{
+  margin-left:10px;
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.danger-btn:hover{
+  background:#dc2626;
+}
+
+/* FLOAT BUTTON */
+#chatToggle{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:55px;
+  height:55px;
+  background:linear-gradient(135deg,#6a11cb,#2575fc);
+  color:white;
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:0 5px 20px rgba(0,0,0,0.3);
+  z-index:999;
+}
+
+/* CHAT BOX */
+.chat-box{
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  width:320px;
+  height:420px;
+  background:white;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:999;
+}
+
+/* HEADER */
+.chat-header{
+  background:linear-gradient(135deg,#6a11cb,#2575fc);
+  color:white;
+  padding:10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.chat-header img{
+  width:30px;
+  margin-right:8px;
+}
+
+/* MESSAGES */
+.chat-messages{
+  flex:1;
+  padding:10px;
+  overflow:auto;
+  font-size:14px;
+}
+
+/* BUBBLES */
+.msg{
+  margin:6px 0;
+  padding:8px 12px;
+  border-radius:10px;
+  max-width:75%;
+}
+
+.user-msg{
+  background:#e0f2fe;
+  align-self:flex-end;
+}
+
+.bot-msg {
+  background: linear-gradient(135deg,#e0f2fe,#f1f5f9);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* OPTIONS */
+.chat-options {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 8px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-options button{
+  background:#e2e8f0;
+  border:none;
+  padding:5px 8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* INPUT */
+.chat-input{
+  display:flex;
+  border-top:1px solid #ddd;
+}
+
+.chat-input input{
+  flex:1;
+  border:none;
+  padding:10px;
+}
+
+.chat-input button{
+  border:none;
+  padding:10px;
+  background:#2575fc;
+  color:white;
+}
+
+  </style>
+  </head>
+
+  <body>
+
+  <!-- LOGIN -->
+<div class="login-main" id="homePage">
+  <div class="glass" style="display:flex; width:900px; overflow:hidden;">
+
+    <!-- LEFT -->
+    <div style="flex:1; padding:50px;">
+      <h2>Login</h2>
+      <p style="color:#e2e8f0; margin-bottom:20px;">
+        Welcome back! Please login to continue
+      </p>  
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+
+    <div style="text-align:right;">
+      <span onclick="openForgot()" style="cursor:pointer; color:white;">
+        Forgot password?
+      </span>
+    </div>
+      <button id="loginBtn" class="btn" type="button">Login</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div style="flex:1; text-align:center; padding:40px; color:white;">
+      <h1>ServiceDesk Application</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" width="260">
+      <p style="margin-top:15px;">Manage users, requests & sessions in one place</p>
+    </div>
+
+  </div>
+</div>
+
+  <div id="forgotScreen" class="hidden" style="height:100vh; justify-content:center; align-items:center;">
+
+  <div class="glass" style="width:400px; padding:40px; text-align:center; color:white;">
+
+    <h2>Forgot Your Password?</h2>
+
+    <input id="fpEmail" placeholder="Enter Email" style="width:100%; margin:10px 0;">
+    <input id="fpPassword" type="password" placeholder="New Password" style="width:100%; margin:10px 0;">
+
+    <button class="btn" onclick="resetPassword()">RESET PASSWORD</button>
+
+    <div style="margin-top:15px; cursor:pointer;" onclick="closeForgot()">Back to Login</div>
+
+  </div>
+</div>
+
+  <!-- DASHBOARD -->
+  <div id="newDashboard" class="hidden">
+  <div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>ServiceDesk</h2>
+
+    <ul>
+      <li onclick="showSection('dashboard')">📊 Dashboard</li>
+      <li onclick="refreshApp()">🔄 Refresh</li>
+      <li id="adminRequestsMenu" onclick="showSection('requests')">📄 Requests</li>
+      <li id="adminUsersMenu" onclick="showSection('users')">👥 Users</li>
+      <li id="adminSessionsMenu" onclick="showSection('sessions')">🧾 Sessions</li>
+      <li id="userMyRequestsMenu" onclick="showSection('requests')">🧾 My Requests</li>
+      <li onclick="showSection('groups')">🔐 Groups</li>
+      <li onclick="logout()">🚪 Logout</li>
+    </ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+  <div class="topbar">
+    Welcome, <span id="profileName"></span>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardSection">
+    <h2>Dashboard</h2>
+    <div class="cards">
+      <div class="card">Requests <br><b id="requestCount">0</b></div>
+      <div class="card">Pending <br><b id="pendingCount">0</b></div>
+      <div class="card">Users <br><b id="userCount">0</b></div>
+    </div>
+
+        <!-- ✅ chart below -->
+    <div style="display:flex; gap:20px; margin-top:20px;">
+
+      <!-- Chart 1 -->
+      <div style="flex:1; height:260px; background:white; padding:15px; border-radius:12px;">
+        <canvas id="requestChart"></canvas>
+      </div>
+
+      <!-- Chart 2 -->
+      <div style="flex:1; height:260px; background:white; padding:15px; border-radius:12px;">
+        <canvas id="userChart"></canvas>
+      </div>
+
+      <div class="dashboard-flex">
+
+    </div>
+      
+
+    </div>
+   </div>
+
+  <!-- ADMIN REQUEST -->
+  <div id="requestSection" class="hidden">
+    <h2>Requests</h2>
+
+   <div class="request-container">
+  <h2>Create Request</h2>
+
+  <div class="request-form">
+
+    <input id="reqUsername" placeholder="Username">
+    <input id="reqEmail" placeholder="Email">
+
+    <input id="reqEmpId" placeholder="Employee ID">
+
+    <select id="reqDept">
+      <option value="">Select Department</option>
+      <option>IT</option>
+      <option>HR</option>
+      <option>FINANCE</option>
+    </select>
+
+    <select id="reqRole">
+      <option>Developer</option>
+      <option>Manager</option>
+      <option>Admin</option>
+    </select>
+
+    <select id="reqManager">
+      <option value="">Select Manager</option>
+      <option>rohit1</option>
+      <option>admin</option>
+    </select>
+
+    <select id="reqType" class="full-width">
+      <option>Onboarding</option>
+      <option>Offboarding</option>
+    </select>
+
+  </div>
+
+  <button class="request-btn" onclick="createRequestUser()">Submit</button>
+</div>
+
+<h3 style="margin-top: 30px; color: white;">Request History</h3>
+
+    <table id="requestTable">
+      <thead>
+        <tr>
+          <th>ID</th><th>Username</th><th>Email</th><th>Emp ID</th>
+          <th>Department</th><th>Manager</th><th>Role</th>
+          <th>Type</th><th>Status</th><th>Created By</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+    <div id="groupsSection" class="hidden">
+    <h2>Groups</h2>
+
+    <div class="premium-card">
+      <input id="groupName" placeholder="Enter Group Name (e.g. AD-HR)">
+      <button onclick="createGroup()">Create Group</button>
+    </div>
+
+    <table id="groupsTable">
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th>Users</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="groupUsersModal" class="modal hidden">
+  <div class="modal-box">
+
+    <h3>Manage Group Users</h3>
+
+    <select id="groupUserSelect" style="
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      margin-bottom:10px;
+    "></select>
+
+    <div style="margin-top:10px;">
+      <button onclick="addUserToGroup()" style="background:#4CAF50;color:white;">Add</button>
+      <button onclick="removeUserFromGroup()" style="background:#f44336;color:white;">Remove</button>
+    </div>
+
+    <ul id="groupUserList" style="
+        list-style:none;
+        padding:0;
+        margin-top:15px;
+        max-height:150px;
+        overflow-y:auto;
+      "></ul>
+
+    <button onclick="closeGroupModal()">Close</button>
+
+  </div>
+</div>
+
+  <!-- USER REQUEST -->
+  <div id="userRequestSection" class="hidden">
+    <h2>My Requests</h2>
+
+   <div class="request-container">
+      <div class="request-form">
+        <input id="usernameUserOnly"  placeholder="Username">
+        <input id="reqEmailUserOnly"  placeholder="email">
+        <input id="employeeIdUserOnly" placeholder="Employee ID">
+
+        <select id="departmentUserOnly">
+          <option value="">Department</option>
+          <option>IT</option>
+          <option>HR</option>
+          <option>FINANCE</option>
+          </select>
+
+        <select id="reqRoleUserOnly">
+          <option value="developer">Developer</option>
+          <option value="manager">Manager</option>
+          <option value="team lead">Team Lead</option>
+          <option value="support enginner">Support Engineer</option>
+          <option value="pmo">PMO</option>
+        </select>
+
+        <input id="managerUserOnly" placeholder="Manager">
+
+        <select id="reqTypeUserOnly">
+          <option value="Onboarding">Onboarding</option>
+          <option value="Offboarding">Offboarding</option>
+        </select>
+      </div>
+
+      <button class="request-btn" onclick="createRequestUser()">Submit</button>
+    </div>
+
+    
+
+    <!-- ✅ FIXED TABLE (MAIN ISSUE) -->
+    <table id="userRequestTable">
+      <thead>
+        <tr>
+          <th>ID</th><th>Username</th><th>Email</th><th>Emp ID</th>
+          <th>Department</th><th>Manager</th><th>Role</th>
+          <th>Type</th><th>Status</th><th>Created By</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- USERS -->
+  <div id="userSection" class="hidden">
+    <h2>Users</h2>
+    <div style="margin-bottom:15px; display:flex; gap:10px;">
+  <input id="userSearch" placeholder="Search user..." onkeyup="filterUsers()">
+
+  <select id="userDeptFilter" onchange="filterUsers()">
+    <option value="">All Dept</option>
+    <option value="IT">IT</option>
+    <option value="HR">HR</option>
+    <option value="FINANCE">FINANCE</option>
+  </select>
+
+  <select id="userStatusFilter" onchange="filterUsers()">
+    <option value="">All Status</option>
+    <option value="Active">Active</option>
+    <option value="Disabled">Disabled</option>
+  </select>
+</div>
+    <table id="usersTable">
+      <thead>
+        <tr>
+          <th>Username</th><th>Email</th><th>Emp ID</th><th>Department</th><th>Manager</th><th>Role</th><th>Status</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- SESSIONS -->
+  <div id="sessionsSection" class="hidden">
+    <h2>Sessions</h2>
+          <div style="margin-bottom:15px; display:flex; gap:10px;">
+
+      <input id="sessionSearch" placeholder="Search email..." 
+        onkeyup="filterSessions()">
+
+      <select id="sessionStatusFilter" onchange="filterSessions()">
+        <option value="">All</option>
+        <option>Active</option>
+        <option>Inactive</option>
+      </select>
+
+    </div>
+    <table id="sessionsTable">
+      <thead>
+        <tr>
+          <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Login Time</th>
+            <th>Logout Time</th>
+            <th>Status</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  </div>
+  </div>
+  </div>
+
+ <div id="chatContainer" class="hidden">
+
+  <!-- FLOAT BUTTON -->
+  <button id="chatToggle" onclick="toggleChat()">
+  <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" 
+       style="width:28px; height:28px;">
+  </button>
+
+  <!-- CHAT BOX -->
+  <div id="chatBox" class="chat-box hidden">
+
+    <div class="chat-header">
+      <div style="display:flex; align-items:center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+        <b>ServiceDesk Bot</b>
+      </div>
+       <!-- ✅ NEW REFRESH BUTTON -->
+       <button onclick="resetChat()" class="reset-btn">↻</button>
+      <span onclick="toggleChat()" style="cursor:pointer;">✖</span>
+    </div>
+
+    <div id="chatMessages" class="chat-messages"></div>
+    <div id="chatOptions" class="chat-options"></div>
+    <!-- OPTIONS -->
+    <div class="chat-options">
+      <button onclick="quickChat('show pending')">Pending</button>
+      <button onclick="quickChat('my requests')">My Requests</button>
+      <button onclick="sendChat('create request')">Create Request</button>
+      <button onclick="sendChat('delete user')">Delete User</button>
+      <button onclick="quickChat('help')">Help</button>
+    </div>
+
+    <!-- INPUT -->
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Type a message...">
+      <button onclick="sendChat()">➤</button>
+
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+  <script src="app.js"></script>
+  </body>
+  </html>
